@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Online Store</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f5f5;
+  color: #222;
+}
+header {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 25px 10px;
+}
+main {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+}
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 8px #ddd;
+}
+.emoji {
+  font-size: 48px;
+}
+button {
+  background: #16864a;
+  color: white;
+  border: 0;
+  padding: 12px;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 5px 0;
+}
+input {
+  padding: 12px;
+  width: 85%;
+  margin: 8px 0;
+}
+#cart {
+  background: white;
+  padding: 18px;
+  margin-top: 25px;
+  border-radius: 12px;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <h1>My Online Store 🛍️</h1>
+  <p>Welcome! Find something you love.</p>
+</header>
+
+<main>
+  <h2>Our Products</h2>
+
+  <div class="products">
+    <div class="card">
+      <div class="emoji">📒</div>
+      <h3>Notebook</h3>
+      <p>₹50</p>
+      <button onclick="add('Notebook',50)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">🖊️</div>
+      <h3>Pen Set</h3>
+      <p>₹40</p>
+      <button onclick="add('Pen Set',40)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <div class="emoji">🎨</div>
+      <h3>Colour Set</h3>
+      <p>₹100</p>
+      <button onclick="add('Colour Set',100)">Add to Cart</button>
+    </div>
+  </div>
+
+  <section id="cart">
+    <h2>Your Cart</h2>
+    <div id="items">Your cart is empty.</div>
+    <h3 id="total">Total: ₹0</h3>
+
+    <h3>Customer Details</h3>
+    <input id="customer" placeholder="Your name">
+    <br>
+    <input id="address" placeholder="Delivery address">
+    <br>
+    <button onclick="order()">Order on WhatsApp</button>
+  </section>
+</main>
+
+<script>
+let cart = [];
+
+function add(name, price) {
+  cart.push({name, price});
+  update();
+}
+
+function update() {
+  document.getElementById('items').innerHTML =
+    cart.length
+      ? cart.map(p => `${p.name} - ₹${p.price}`).join('<br>')
+      : 'Your cart is empty.';
+
+  document.getElementById('total').textContent =
+    'Total: ₹' + cart.reduce((sum, p) => sum + p.price, 0);
+}
+
+function order() {
+  if (!cart.length) {
+    alert('Please add a product first.');
+    return;
+  }
+
+  const name = document.getElementById('customer').value.trim();
+  const address = document.getElementById('address').value.trim();
+
+  if (!name || !address) {
+    alert('Please enter your name and delivery address.');
+    return;
+  }
+
+  const phone = '91XXXXXXXXXX';
+  const products = cart.map(p => `${p.name} - ₹${p.price}`).join('\n');
+  const total = cart.reduce((sum, p) => sum + p.price, 0);
+
+  const message = `New Order\nName: ${name}\nAddress: ${address}\nProducts:\n${products}\nTotal: ₹${total}`;
+
+  window.open(
+    'https://wa.me/' + phone + '?text=' + encodeURIComponent(message),
+    '_blank'
+  );
+}
+</script>
+</body>
+</html>
